@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RODRIGO MZS — Real Estate Advisor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ── DARK (default) ── */
+    :root {
+      --bg:            #080808;
+      --bg2:           #111111;
+      --white:         #f4f2ef;
+      --sand:          #c9b99a;
+      --bronze:        #a07850;
+      --dim:           rgba(244,242,239,0.5);
+      --dimmer:        rgba(244,242,239,0.15);
+      --border:        rgba(244,242,239,0.1);
+      --border-strong: rgba(244,242,239,0.2);
+      --chip-bg:       rgba(255,255,255,0.025);
+      --card-bg:       rgba(255,255,255,0.02);
+      --toggle-icon:   "☀️";
+
+      --tr: all 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── LIGHT ── */
+    [data-theme="light"] {
+      --bg:            #f0ede8;
+      --bg2:           #e5e1da;
+      --white:         #1a1814;
+      --sand:          #7a5c3a;
+      --bronze:        #8a5c2a;
+      --dim:           rgba(26,24,20,0.55);
+      --dimmer:        rgba(26,24,20,0.3);
+      --border:        rgba(26,24,20,0.1);
+      --border-strong: rgba(26,24,20,0.2);
+      --chip-bg:       rgba(0,0,0,0.03);
+      --card-bg:       rgba(0,0,0,0.02);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.5s cubic-bezier(.4,0,.2,1), color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 20px 0;
+      max-width: 440px;
+      margin: 0 auto;
+      gap: 12px;
+    }
+
+    /* LANG */
+    .lang-bar {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .lang-btn {
+      padding: 5px 11px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--dim);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: var(--tr);
+    }
+
+    .lang-btn:hover,
+    .lang-btn.active {
+      background: var(--white);
+      color: var(--bg);
+      border-color: var(--white);
+    }
+
+    /* THEME TOGGLE */
+    .theme-toggle {
+      flex-shrink: 0;
+      width: 52px;
+      height: 28px;
+      border-radius: 100px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      position: relative;
+      transition: var(--tr);
+      display: flex;
+      align-items: center;
+      padding: 3px;
+    }
+
+    .theme-toggle:hover { border-color: var(--border-strong); }
+
+    .toggle-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--white);
+      transition: var(--tr);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    [data-theme="light"] .toggle-thumb {
+      transform: translateX(24px);
+    }
+
+    /* ── PAGE ── */
+    .page {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 20px 20px 60px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── PROFILE CARD 4:5 ── */
+    .profile-card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+      animation: fadeUp 0.7s cubic-bezier(.4,0,.2,1) both;
+      transition: border-color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .profile-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      animation: subtle-zoom 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes subtle-zoom {
+      from { transform: scale(1); }
+      to   { transform: scale(1.04); }
+    }
+
+    .profile-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 28%,
+        rgba(8,8,8,0.4) 62%,
+        rgba(8,8,8,0.9) 100%
+      );
+      transition: background 0.5s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+    }
+
+    [data-theme="light"] .profile-card-overlay {
+      background: linear-gradient(
+        to bottom,
+        transparent 25%,
+        rgba(240,237,232,0.35) 58%,
+        rgba(240,237,232,0.88) 100%
+      );
+    }
+
+    .profile-card-text {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 2;
+      padding: 24px 22px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border: 1px solid rgba(244,242,239,0.22);
+      border-radius: 100px;
+      background: rgba(8,8,8,0.45);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #c9b99a;
+      width: fit-content;
+      transition: var(--tr);
+    }
+
+    [data-theme="light"] .badge {
+      border-color: rgba(26,24,20,0.18);
+      background: rgba(240,237,232,0.55);
+      color: #7a5c3a;
+    }
+
+    .badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: blink 2.2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    .profile-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 12vw, 66px);
+      line-height: 0.92;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .profile-sub {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--sand);
+      letter-spacing: 0.04em;
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .profile-location {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-tag {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .section-tag::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      transition: background 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── BIO ── */
+    .bio-section {
+      padding: 28px 0 24px;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.7s 0.15s cubic-bezier(.4,0,.2,1) both;
+      transition: border-color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .bio-text {
+      font-size: 13.5px;
+      line-height: 1.82;
+      font-weight: 300;
+      color: var(--dim);
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .bio-text strong {
+      color: var(--white);
+      font-weight: 400;
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .langs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 16px;
+    }
+
+    .lang-pill {
+      padding: 4px 11px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--sand);
+      background: var(--chip-bg);
+      transition: var(--tr);
+    }
+
+    /* ── SERVICES ── */
+    .lifestyle-section {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.7s 0.22s cubic-bezier(.4,0,.2,1) both;
+      transition: border-color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .lifestyle-intro {
+      font-size: 13.5px;
+      line-height: 1.82;
+      font-weight: 300;
+      color: var(--dim);
+      margin-bottom: 16px;
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .lifestyle-intro strong {
+      color: var(--white);
+      font-weight: 400;
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .service-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--chip-bg);
+      font-size: 11.5px;
+      font-weight: 300;
+      color: var(--dim);
+      transition: var(--tr);
+    }
+
+    .chip-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--bronze);
+      flex-shrink: 0;
+      transition: background 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── GALLERY ── */
+    .gallery-section {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.7s 0.3s cubic-bezier(.4,0,.2,1) both;
+      transition: border-color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .gallery-scroll {
+      margin: 0 -20px;
+      padding: 0 20px;
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
+    }
+
+    .gallery-scroll::-webkit-scrollbar { display: none; }
+    .gallery-scroll:active { cursor: grabbing; }
+
+    .gallery-item {
+      flex: 0 0 auto;
+      width: 148px;
+      height: 208px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: border-color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .gallery-item.wide { width: 182px; }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    /* ── STATS — transparent ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      margin-top: 22px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .stat-cell {
+      background: transparent;
+      padding: 18px 10px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+      transition: border-color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .stat-cell:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 27px;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      line-height: 1;
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .stat-lbl {
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 4px;
+      font-weight: 300;
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── LINKS ── */
+    .links-section {
+      padding: 24px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      animation: fadeUp 0.7s 0.42s cubic-bezier(.4,0,.2,1) both;
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--card-bg);
+      text-decoration: none;
+      color: var(--white);
+      transition: var(--tr);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(128,128,128,0.04);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .link-card:hover::before { opacity: 1; }
+    .link-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+
+    .link-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--chip-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--tr);
+    }
+
+    .link-icon svg { width: 20px; height: 20px; }
+    .link-text { flex: 1; }
+
+    .link-name {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    .link-handle {
+      font-size: 11px;
+      color: var(--dim);
+      font-weight: 300;
+      margin-top: 1px;
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .link-arrow {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--tr);
+    }
+
+    .link-arrow svg {
+      width: 12px; height: 12px;
+      fill: none;
+      stroke: var(--dim);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: var(--tr);
+    }
+
+    .link-card:hover .link-arrow { border-color: var(--sand); background: var(--sand); }
+    .link-card:hover .link-arrow svg { stroke: var(--bg); transform: rotate(45deg); }
+
+    .link-card.wa {
+      background: rgba(37,211,102,0.04);
+      border-color: rgba(37,211,102,0.14);
+    }
+    .link-card.wa:hover { border-color: rgba(37,211,102,0.32); background: rgba(37,211,102,0.07); }
+    .link-card.wa .link-icon { background: rgba(37,211,102,0.1); }
+
+    .link-card.portfolio-card {
+      background: rgba(201,185,154,0.05);
+      border-color: rgba(201,185,154,0.18);
+    }
+    .link-card.portfolio-card:hover {
+      border-color: rgba(201,185,154,0.38);
+      background: rgba(201,185,154,0.09);
+    }
+    .link-card.portfolio-card .link-icon {
+      background: rgba(201,185,154,0.1);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      padding: 28px 0 0;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dimmer);
+      transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR: lang + theme toggle -->
+<div class="top-bar">
+  <div class="lang-bar">
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+    <button class="lang-btn" data-lang="fr">FR</button>
+    <button class="lang-btn" data-lang="it">IT</button>
+    <button class="lang-btn" data-lang="pt">PT</button>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <div class="toggle-thumb" id="toggleThumb">🌙</div>
+  </button>
+</div>
+
+<div class="page">
+
+  <!-- PROFILE CARD 4:5 -->
+  <div class="profile-card">
+    <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1780436873/WhatsApp_Image_2026-06-02_at_13.09.38_j0qn7j.jpg" alt="Rodrigo MZS — Real Estate Advisor in Marbella" />
+    <div class="profile-card-overlay"></div>
+    <div class="profile-card-text">
+      <div class="badge" data-i18n="badge">Real Estate Advisor · Marbella · Costa del Sol</div>
+      <h1 class="profile-name">RODRIGO<br>MZS</h1>
+      <p class="profile-sub" data-i18n="profile_sub">Luxury hospitality background · Real estate advisor</p>
+      <p class="profile-location" data-i18n="profile_location">Marbella, Costa del Sol, Spain</p>
+    </div>
+  </div>
+
+  <!-- BIO -->
+  <section class="bio-section">
+    <p class="section-tag" data-i18n="about_label">About</p>
+    <p class="bio-text" data-i18n="about_text"></p>
+    <div class="langs">
+      <span class="lang-pill">ES</span>
+      <span class="lang-pill">EN</span>
+      <span class="lang-pill">IT</span>
+      <span class="lang-pill">PT</span>
+      <span class="lang-pill">FR</span>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="lifestyle-section">
+    <p class="section-tag" data-i18n="services_label">Real Estate Services</p>
+    <p class="lifestyle-intro" data-i18n="services_text"></p>
+    <div class="services-grid">
+      <div class="service-chip"><span class="chip-dot"></span><span data-i18n="s1">Property Sales</span></div>
+      <div class="service-chip"><span class="chip-dot"></span><span data-i18n="s2">Luxury Villas</span></div>
+      <div class="service-chip"><span class="chip-dot"></span><span data-i18n="s3">New Developments</span></div>
+      <div class="service-chip"><span class="chip-dot"></span><span data-i18n="s4">Investment Deals</span></div>
+      <div class="service-chip"><span class="chip-dot"></span><span data-i18n="s5">Rentals</span></div>
+      <div class="service-chip"><span class="chip-dot"></span><span data-i18n="s6">Mortgage Support</span></div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-section">
+    <p class="section-tag" data-i18n="portfolio_label">Property Portfolio</p>
+    <div class="gallery-scroll" id="galleryScroll">
+      <!-- Elegantes imágenes temporales de arquitectura / real estate -->
+      <div class="gallery-item wide">
+        <img src="https://images.unsplash.com/photo-1613490900233-141c5560d75d?auto=format&fit=crop&q=80&w=400&h=560" alt="Luxury Villa Exterior" />
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=400&h=560" alt="Modern Mansion" />
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=400&h=560" alt="Contemporary Interior" />
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=400&h=560" alt="Luxury Real Estate Pool" />
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=400&h=560" alt="Premium Living Room" />
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=400&h=560" alt="Exclusive Property" />
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-num">10+</div>
+        <div class="stat-lbl" data-i18n="stat_exp">Years in luxury service</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">5</div>
+        <div class="stat-lbl" data-i18n="stat_lang">Languages</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">MBL</div>
+        <div class="stat-lbl" data-i18n="stat_loc">Marbella based</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section class="links-section">
+    <p class="section-tag" data-i18n="connect_label">Connect</p>
+
+    <!-- Instagram -->
+    <a href="https://www.instagram.com/argrodrigo?igsh=Y29oeWFqZTBxZXR6" target="_blank" class="link-card">
+      <div class="link-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#f09433"/>
+              <stop offset="50%" stop-color="#dc2743"/>
+              <stop offset="100%" stop-color="#bc1888"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#ig)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        </svg>
+      </div>
+      <div class="link-text">
+        <div class="link-name">Instagram</div>
+        <div class="link-handle">@argrodrigo</div>
+      </div>
+      <div class="link-arrow">
+        <svg viewBox="0 0 24 24"><polyline points="7 17 17 7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </div>
+    </a>
+
+    <!-- WhatsApp -->
+    <a href="https://wa.me/34633724509" target="_blank" class="link-card wa">
+      <div class="link-icon">
+        <svg viewBox="0 0 24 24" fill="#25d366">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+      </div>
+      <div class="link-text">
+        <div class="link-name">WhatsApp</div>
+        <div class="link-handle">+34 633 724 509</div>
+      </div>
+      <div class="link-arrow">
+        <svg viewBox="0 0 24 24"><polyline points="7 17 17 7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </div>
+    </a>
+
+    <!-- Email -->
+    <a href="mailto:rodrigo@tophousemarbella.com" target="_blank" class="link-card portfolio-card">
+      <div class="link-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--sand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+      </div>
+      <div class="link-text">
+        <div class="link-name" data-i18n="link_email_name">Email</div>
+        <div class="link-handle" data-i18n="link_email_handle">rodrigo@tophousemarbella.com</div>
+      </div>
+      <div class="link-arrow">
+        <svg viewBox="0 0 24 24"><polyline points="7 17 17 7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </div>
+    </a>
+
+    <!-- Top House Marbella Website -->
+    <a href="https://www.tophousemarbella.com/" target="_blank" class="link-card">
+      <div class="link-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--white)">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+      </div>
+      <div class="link-text">
+        <div class="link-name" data-i18n="link_web_name">Top House Marbella</div>
+        <div class="link-handle" data-i18n="link_web_handle">Visit Website</div>
+      </div>
+      <div class="link-arrow">
+        <svg viewBox="0 0 24 24"><polyline points="7 17 17 7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </div>
+    </a>
+
+    <!-- Company Contact -->
+    <a href="mailto:info@tophousemarbella.com" target="_blank" class="link-card">
+      <div class="link-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--white)">
+          <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+          <line x1="9" y1="22" x2="9" y2="22"></line>
+          <line x1="15" y1="22" x2="15" y2="22"></line>
+          <line x1="9" y1="6" x2="9.01" y2="6"></line>
+          <line x1="15" y1="6" x2="15.01" y2="6"></line>
+          <line x1="9" y1="10" x2="9.01" y2="10"></line>
+          <line x1="15" y1="10" x2="15.01" y2="10"></line>
+          <line x1="9" y1="14" x2="9.01" y2="14"></line>
+          <line x1="15" y1="14" x2="15.01" y2="14"></line>
+          <line x1="9" y1="18" x2="9.01" y2="18"></line>
+          <line x1="15" y1="18" x2="15.01" y2="18"></line>
+        </svg>
+      </div>
+      <div class="link-text">
+        <div class="link-name" data-i18n="link_company_name">Company Contact</div>
+        <div class="link-handle" data-i18n="link_company_handle">info@tophousemarbella.com</div>
+      </div>
+      <div class="link-arrow">
+        <svg viewBox="0 0 24 24"><polyline points="7 17 17 7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </div>
+    </a>
+
+  </section>
+
+  <footer class="footer" data-i18n="footer">© 2026 Rodrigo MZS · Top House Marbella · Marbella, Spain</footer>
+</div>
+
+<script>
+/* ── TRANSLATIONS ── */
+const T = {
+  en: {
+    badge:"Real Estate Advisor · Marbella · Costa del Sol",
+    profile_sub:"Luxury hospitality background · Real estate advisor",
+    profile_location:"Marbella, Costa del Sol, Spain",
+    about_label:"About",
+    about_text:`<strong>Luxury hospitality</strong> taught me that true excellence lies in trust, discretion, and genuinely personalized service. After more than a decade in the industry, those values naturally guided me into real estate, where I combine refined client care, strong communication skills, and meticulous attention to detail to assist <strong>international clients</strong> in discovering exceptional investment opportunities in La Costa del Sol.`,
+    services_label:"Real Estate Services",
+    services_text:`From private residences to investment opportunities, I assist international buyers, sellers and investors across Marbella and La Costa del Sol with a <strong>discreet, client-first approach</strong>.`,
+    s1:"Property Sales",s2:"Luxury Villas",s3:"New Developments",
+    s4:"Investment Deals",s5:"Rentals",s6:"Mortgage Support",
+    portfolio_label:"Property Portfolio",
+    stat_exp:"Years in luxury service",stat_lang:"Languages",stat_loc:"Marbella based",
+    connect_label:"Connect",
+    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Spain",
+    link_email_name:"Email",
+    link_email_handle:"rodrigo@tophousemarbella.com",
+    link_web_name:"Top House Marbella",
+    link_web_handle:"Visit Website",
+    link_company_name:"Company Contact",
+    link_company_handle:"info@tophousemarbella.com",
+  },
+  es: {
+    badge:"Asesor Inmobiliario · Marbella · Costa del Sol",
+    profile_sub:"Experiencia en hospitality de lujo · Asesor inmobiliario",
+    profile_location:"Marbella, Costa del Sol, España",
+    about_label:"Sobre mí",
+    about_text:`La <strong>hospitalidad de lujo</strong> me enseñó que la verdadera excelencia reside en la confianza, la discreción y el servicio genuinamente personalizado. Tras más de una década en el sector, esos valores me guiaron de forma natural hacia el sector inmobiliario, donde combino una atención al cliente refinada y una meticulosa atención al detalle para ayudar a <strong>clientes internacionales</strong> a descubrir excepcionales oportunidades de inversión en la Costa del Sol.`,
+    services_label:"Servicios Inmobiliarios",
+    services_text:`Desde residencias privadas hasta oportunidades de inversión, asisto a compradores, vendedores e inversores internacionales en Marbella y la Costa del Sol con un <strong>enfoque discreto y orientado al cliente</strong>.`,
+    s1:"Venta de Propiedades",s2:"Villas de Lujo",s3:"Nuevas Promociones",
+    s4:"Oportunidades de Inversión",s5:"Alquileres",s6:"Asesoramiento Hipotecario",
+    portfolio_label:"Cartera de Propiedades",
+    stat_exp:"Años en servicio de lujo",stat_lang:"Idiomas",stat_loc:"Base en Marbella",
+    connect_label:"Contacto",
+    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, España",
+    link_email_name:"Email",
+    link_email_handle:"rodrigo@tophousemarbella.com",
+    link_web_name:"Top House Marbella",
+    link_web_handle:"Visitar Web",
+    link_company_name:"Contacto Empresa",
+    link_company_handle:"info@tophousemarbella.com",
+  },
+  de: {
+    badge:"Immobilienberater · Marbella · Costa del Sol",
+    profile_sub:"Hintergrund in der Luxushotellerie · Immobilienberater",
+    profile_location:"Marbella, Costa del Sol, Spanien",
+    about_label:"Über mich",
+    about_text:`Die <strong>Luxushotellerie</strong> hat mich gelehrt, dass wahre Exzellenz in Vertrauen, Diskretion und wirklich personalisiertem Service liegt. Nach über einem Jahrzehnt in der Branche haben mich diese Werte natürlich in die Immobilienbranche geführt, wo ich raffinierte Kundenbetreuung und akribische Liebe zum Detail kombiniere, um <strong>internationalen Kunden</strong> bei der Entdeckung außergewöhnlicher Investitionsmöglichkeiten an der Costa del Sol zu helfen.`,
+    services_label:"Immobilienservice",
+    services_text:`Von Privatresidenzen bis hin zu Investitionsmöglichkeiten unterstütze ich internationale Käufer, Verkäufer und Investoren in ganz Marbella und an der Costa del Sol mit einem <strong>diskreten, kundenorientierten Ansatz</strong>.`,
+    s1:"Immobilienverkauf",s2:"Luxusvillen",s3:"Neubauprojekte",
+    s4:"Investitionsangebote",s5:"Vermietung",s6:"Hypothekenunterstützung",
+    portfolio_label:"Immobilienportfolio",
+    stat_exp:"Jahre Luxus-Service",stat_lang:"Sprachen",stat_loc:"Sitz in Marbella",
+    connect_label:"Kontakt",
+    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Spanien",
+    link_email_name:"E-Mail",
+    link_email_handle:"rodrigo@tophousemarbella.com",
+    link_web_name:"Top House Marbella",
+    link_web_handle:"Website besuchen",
+    link_company_name:"Unternehmenskontakt",
+    link_company_handle:"info@tophousemarbella.com",
+  },
+  fr: {
+    badge:"Conseiller Immobilier · Marbella · Costa del Sol",
+    profile_sub:"Expérience en hôtellerie de luxe · Conseiller immobilier",
+    profile_location:"Marbella, Costa del Sol, Espagne",
+    about_label:"À propos",
+    about_text:`L'<strong>hôtellerie de luxe</strong> m'a appris que la véritable excellence réside dans la confiance, la discrétion et un service véritablement personnalisé. Après plus d'une décennie dans l'industrie, ces valeurs m'ont naturellement guidé vers l'immobilier, où je combine un service client raffiné et une attention méticuleuse aux détails pour aider les <strong>clients internationaux</strong> à découvrir des opportunités d'investissement exceptionnelles sur la Costa del Sol.`,
+    services_label:"Services Immobiliers",
+    services_text:`Des résidences privées aux opportunités d'investissement, j'accompagne les acheteurs, vendeurs et investisseurs internationaux à travers Marbella et la Costa del Sol avec une <strong>approche discrète et axée sur le client</strong>.`,
+    s1:"Ventes Immobilières",s2:"Villas de Luxe",s3:"Nouveaux Développements",
+    s4:"Offres d'Investissement",s5:"Locations",s6:"Assistance Hypothécaire",
+    portfolio_label:"Portefeuille Immobilier",
+    stat_exp:"Ans de service de luxe",stat_lang:"Langues",stat_loc:"Basé à Marbella",
+    connect_label:"Contact",
+    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Espagne",
+    link_email_name:"Email",
+    link_email_handle:"rodrigo@tophousemarbella.com",
+    link_web_name:"Top House Marbella",
+    link_web_handle:"Visiter le Site Web",
+    link_company_name:"Contact Entreprise",
+    link_company_handle:"info@tophousemarbella.com",
+  },
+  it: {
+    badge:"Consulente Immobiliare · Marbella · Costa del Sol",
+    profile_sub:"Background in ospitalità di lusso · Consulente immobiliare",
+    profile_location:"Marbella, Costa del Sol, Spagna",
+    about_label:"Chi sono",
+    about_text:`L'<strong>ospitalità di lusso</strong> mi ha insegnato che la vera eccellenza risiede nella fiducia, nella discrezione e in un servizio genuinamente personalizzato. Dopo oltre un decennio nel settore, questi valori mi hanno guidato naturalmente verso il settore immobiliare, dove combino un'assistenza clienti raffinata e una meticolosa attenzione ai dettagli per aiutare <strong>clienti internazionali</strong> a scoprire eccezionali opportunità di investimento nella Costa del Sol.`,
+    services_label:"Servizi Immobiliari",
+    services_text:`Dalle residenze private alle opportunità di investimento, assisto acquirenti, venditori e investitori internazionali in tutta Marbella e nella Costa del Sol con un <strong>approccio discreto e orientato al cliente</strong>.`,
+    s1:"Vendita Proprietà",s2:"Ville di Lusso",s3:"Nuovi Sviluppi",
+    s4:"Offerte di Investimento",s5:"Affitti",s6:"Supporto Mutui",
+    portfolio_label:"Portfolio Immobiliare",
+    stat_exp:"Anni nei servizi di lusso",stat_lang:"Lingue",stat_loc:"Base a Marbella",
+    connect_label:"Contatti",
+    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Spagna",
+    link_email_name:"Email",
+    link_email_handle:"rodrigo@tophousemarbella.com",
+    link_web_name:"Top House Marbella",
+    link_web_handle:"Visita il Sito",
+    link_company_name:"Contatto Aziendale",
+    link_company_handle:"info@tophousemarbella.com",
+  },
+  pt: {
+    badge:"Consultor Imobiliário · Marbella · Costa del Sol",
+    profile_sub:"Experiência em hospitalidade de luxo · Consultor imobiliário",
+    profile_location:"Marbella, Costa del Sol, Espanha",
+    about_label:"Sobre mim",
+    about_text:`A <strong>hospitalidade de luxo</strong> ensinou-me que a verdadeira excelência reside na confiança, discrição e num serviço genuinamente personalizado. Após mais de uma década no setor, esses valores guiaram-me naturalmente para o mercado imobiliário, onde combino um atendimento requintado e uma meticulosa atenção aos detalhes para ajudar <strong>clientes internacionais</strong> a descobrir excecionais oportunidades de investimento na Costa del Sol.`,
+    services_label:"Serviços Imobiliários",
+    services_text:`Desde residências privadas a oportunidades de investimento, ajudo compradores, vendedores e investidores internacionais em toda a Marbella e Costa del Sol com uma <strong>abordagem discreta e focada no cliente</strong>.`,
+    s1:"Venda de Propriedades",s2:"Vilas de Luxo",s3:"Novos Empreendimentos",
+    s4:"Oportunidades de Investimento",s5:"Arrendamentos",s6:"Apoio a Crédito",
+    portfolio_label:"Portfólio Imobiliário",
+    stat_exp:"Anos em serviço de luxo",stat_lang:"Idiomas",stat_loc:"Baseado em Marbella",
+    connect_label:"Contacto",
+    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Espanha",
+    link_email_name:"Email",
+    link_email_handle:"rodrigo@tophousemarbella.com",
+    link_web_name:"Top House Marbella",
+    link_web_handle:"Visitar Site",
+    link_company_name:"Contacto da Empresa",
+    link_company_handle:"info@tophousemarbella.com",
+  },
+};
+
+function applyLang(lang) {
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.dataset.lang === lang)
+  );
+  document.documentElement.lang = lang;
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn =>
+  btn.addEventListener('click', () => applyLang(btn.dataset.lang))
+);
+applyLang('en');
+
+/* ── THEME TOGGLE ── */
+const html = document.documentElement;
+const thumb = document.getElementById('toggleThumb');
+let isDark = true;
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  isDark = !isDark;
+  html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  thumb.textContent = isDark ? '🌙' : '☀️';
+});
+
+/* ── DRAG GALLERY ── */
+const gallery = document.getElementById('galleryScroll');
+let isDown = false, startX, scrollLeft;
+gallery.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - gallery.offsetLeft; scrollLeft = gallery.scrollLeft; });
+gallery.addEventListener('mouseleave', () => isDown = false);
+gallery.addEventListener('mouseup', () => isDown = false);
+gallery.addEventListener('mousemove', e => {
+  if (!isDown) return;
+  e.preventDefault();
+  gallery.scrollLeft = scrollLeft - (e.pageX - gallery.offsetLeft - startX) * 1.5;
+});
+</script>
+</body>
+</html>
