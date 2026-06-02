@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RODRIGO MZS — Real Estate Advisor</title>
+  <title>RODRIGO MIGUEL ZABALA SCHLEGEL — Real Estate Advisor</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -183,9 +183,9 @@
       inset: 0;
       background: linear-gradient(
         to bottom,
-        transparent 28%,
-        rgba(8,8,8,0.4) 62%,
-        rgba(8,8,8,0.9) 100%
+        transparent 35%,
+        rgba(8,8,8,0.42) 68%,
+        rgba(8,8,8,0.92) 100%
       );
       transition: background 0.5s cubic-bezier(.4,0,.2,1);
       pointer-events: none;
@@ -194,9 +194,9 @@
     [data-theme="light"] .profile-card-overlay {
       background: linear-gradient(
         to bottom,
-        transparent 25%,
-        rgba(240,237,232,0.35) 58%,
-        rgba(240,237,232,0.88) 100%
+        transparent 35%,
+        rgba(240,237,232,0.35) 68%,
+        rgba(240,237,232,0.92) 100%
       );
     }
 
@@ -204,28 +204,30 @@
       position: absolute;
       bottom: 0; left: 0; right: 0;
       z-index: 2;
-      padding: 24px 22px 22px;
+      padding: 20px 18px 20px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 12px;
+      padding: 4px 10px;
       border: 1px solid rgba(244,242,239,0.22);
       border-radius: 100px;
       background: rgba(8,8,8,0.45);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      font-size: 9px;
+      font-size: clamp(8px, 2.2vw, 9px);
       font-weight: 500;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: #c9b99a;
-      width: fit-content;
+      max-width: fit-content;
+      white-space: nowrap;
+      align-self: flex-start;
       transition: var(--tr);
     }
 
@@ -251,8 +253,8 @@
 
     .profile-name {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(40px, 12vw, 66px);
-      line-height: 0.92;
+      font-size: clamp(42px, 13vw, 58px);
+      line-height: 0.9;
       letter-spacing: 0.05em;
       color: var(--white);
       transition: color 0.5s cubic-bezier(.4,0,.2,1);
@@ -274,6 +276,37 @@
       text-transform: uppercase;
       color: var(--dim);
       transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    @media (max-width: 380px) {
+      .profile-card-text {
+        padding: 18px 16px 18px;
+      }
+      .badge {
+        font-size: 8px;
+        letter-spacing: 0.16em;
+        padding: 4px 9px;
+      }
+      .profile-name {
+        font-size: clamp(38px, 12.5vw, 52px);
+      }
+      .profile-sub {
+        font-size: 12px;
+        line-height: 1.35;
+      }
+      .profile-location {
+        font-size: 9px;
+        letter-spacing: 0.14em;
+      }
+    }
+
+    @media (max-width: 340px) {
+      .badge {
+        letter-spacing: 0.13em;
+      }
+      .profile-name {
+        font-size: 44px;
+      }
     }
 
     /* ── SECTION LABEL ── */
@@ -613,13 +646,13 @@
 
   <!-- PROFILE CARD 4:5 -->
   <div class="profile-card">
-    <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1780436873/WhatsApp_Image_2026-06-02_at_13.09.38_j0qn7j.jpg" alt="Rodrigo MZS — Real Estate Advisor in Marbella" />
+    <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1780436873/WhatsApp_Image_2026-06-02_at_13.09.38_j0qn7j.jpg" alt="Rodrigo Miguel Zabala Schlegel — Real Estate Advisor in Marbella" />
     <div class="profile-card-overlay"></div>
     <div class="profile-card-text">
-      <div class="badge" data-i18n="badge">Real Estate Advisor · Marbella · Costa del Sol</div>
-      <h1 class="profile-name">RODRIGO<br>MZS</h1>
+      <div class="badge" data-i18n="badge">Real Estate Advisor</div>
+      <h1 class="profile-name">RODRIGO<br>ZABALA</h1>
       <p class="profile-sub" data-i18n="profile_sub">Luxury hospitality background · Real estate advisor</p>
-      <p class="profile-location" data-i18n="profile_location">Marbella, Costa del Sol, Spain</p>
+      <p class="profile-location" data-i18n="profile_location">Marbella · Costa del Sol, Spain</p>
     </div>
   </div>
 
@@ -656,22 +689,22 @@
     <div class="gallery-scroll" id="galleryScroll">
       <!-- Elegantes imágenes temporales de arquitectura / real estate -->
       <div class="gallery-item wide">
-        <img src="https://images.unsplash.com/photo-1613490900233-141c5560d75d?auto=format&fit=crop&q=80&w=400&h=560" alt="Luxury Villa Exterior" />
+        <img src="https://images.unsplash.com/photo-1613490900233-141c5560d75d?auto=format&fit=crop&q=80&w=400&h=560" alt="Luxury villa in Marbella" />
       </div>
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=400&h=560" alt="Modern Mansion" />
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=400&h=560" alt="Modern apartment in Costa del Sol" />
       </div>
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=400&h=560" alt="Contemporary Interior" />
+        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=400&h=560" alt="New development property" />
       </div>
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=400&h=560" alt="Luxury Real Estate Pool" />
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=400&h=560" alt="Mediterranean finca" />
       </div>
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=400&h=560" alt="Premium Living Room" />
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=400&h=560" alt="Investment property in Marbella" />
       </div>
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=400&h=560" alt="Exclusive Property" />
+        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=400&h=560" alt="Rental property in Costa del Sol" />
       </div>
     </div>
 
@@ -761,8 +794,8 @@
         </svg>
       </div>
       <div class="link-text">
-        <div class="link-name" data-i18n="link_web_name">Top House Marbella</div>
-        <div class="link-handle" data-i18n="link_web_handle">Visit Website</div>
+        <div class="link-name" data-i18n="link_web_name">Top House Marbella Website</div>
+        <div class="link-handle" data-i18n="link_web_handle">View available properties</div>
       </div>
       <div class="link-arrow">
         <svg viewBox="0 0 24 24"><polyline points="7 17 17 7"/><polyline points="7 7 17 7 17 17"/></svg>
@@ -788,7 +821,7 @@
       </div>
       <div class="link-text">
         <div class="link-name" data-i18n="link_company_name">Company Contact</div>
-        <div class="link-handle" data-i18n="link_company_handle">info@tophousemarbella.com</div>
+        <div class="link-handle" data-i18n="link_company_handle">info@tophousemarbella.com · +34 662 592 504</div>
       </div>
       <div class="link-arrow">
         <svg viewBox="0 0 24 24"><polyline points="7 17 17 7"/><polyline points="7 7 17 7 17 17"/></svg>
@@ -797,16 +830,16 @@
 
   </section>
 
-  <footer class="footer" data-i18n="footer">© 2026 Rodrigo MZS · Top House Marbella · Marbella, Spain</footer>
+  <footer class="footer" data-i18n="footer">© 2026 Rodrigo Miguel Zabala Schlegel · Top House Marbella · Marbella, Spain</footer>
 </div>
 
 <script>
 /* ── TRANSLATIONS ── */
 const T = {
   en: {
-    badge:"Real Estate Advisor · Marbella · Costa del Sol",
+    badge:"Real Estate Advisor",
     profile_sub:"Luxury hospitality background · Real estate advisor",
-    profile_location:"Marbella, Costa del Sol, Spain",
+    profile_location:"Marbella · Costa del Sol, Spain",
     about_label:"About",
     about_text:`<strong>Luxury hospitality</strong> taught me that true excellence lies in trust, discretion, and genuinely personalized service. After more than a decade in the industry, those values naturally guided me into real estate, where I combine refined client care, strong communication skills, and meticulous attention to detail to assist <strong>international clients</strong> in discovering exceptional investment opportunities in La Costa del Sol.`,
     services_label:"Real Estate Services",
@@ -816,18 +849,18 @@ const T = {
     portfolio_label:"Property Portfolio",
     stat_exp:"Years in luxury service",stat_lang:"Languages",stat_loc:"Marbella based",
     connect_label:"Connect",
-    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Spain",
+    footer:"© 2026 Rodrigo Miguel Zabala Schlegel · Top House Marbella · Marbella, Spain",
     link_email_name:"Email",
     link_email_handle:"rodrigo@tophousemarbella.com",
-    link_web_name:"Top House Marbella",
-    link_web_handle:"Visit Website",
+    link_web_name:"Top House Marbella Website",
+    link_web_handle:"View available properties",
     link_company_name:"Company Contact",
-    link_company_handle:"info@tophousemarbella.com",
+    link_company_handle:"info@tophousemarbella.com · +34 662 592 504",
   },
   es: {
-    badge:"Asesor Inmobiliario · Marbella · Costa del Sol",
+    badge:"Asesor inmobiliario",
     profile_sub:"Experiencia en hospitality de lujo · Asesor inmobiliario",
-    profile_location:"Marbella, Costa del Sol, España",
+    profile_location:"Marbella · Costa del Sol, España",
     about_label:"Sobre mí",
     about_text:`La <strong>hospitalidad de lujo</strong> me enseñó que la verdadera excelencia reside en la confianza, la discreción y el servicio genuinamente personalizado. Tras más de una década en el sector, esos valores me guiaron de forma natural hacia el sector inmobiliario, donde combino una atención al cliente refinada y una meticulosa atención al detalle para ayudar a <strong>clientes internacionales</strong> a descubrir excepcionales oportunidades de inversión en la Costa del Sol.`,
     services_label:"Servicios Inmobiliarios",
@@ -837,18 +870,18 @@ const T = {
     portfolio_label:"Cartera de Propiedades",
     stat_exp:"Años en servicio de lujo",stat_lang:"Idiomas",stat_loc:"Base en Marbella",
     connect_label:"Contacto",
-    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, España",
+    footer:"© 2026 Rodrigo Miguel Zabala Schlegel · Top House Marbella · Marbella, España",
     link_email_name:"Email",
     link_email_handle:"rodrigo@tophousemarbella.com",
-    link_web_name:"Top House Marbella",
-    link_web_handle:"Visitar Web",
+    link_web_name:"Sitio Web Top House Marbella",
+    link_web_handle:"Ver propiedades disponibles",
     link_company_name:"Contacto Empresa",
-    link_company_handle:"info@tophousemarbella.com",
+    link_company_handle:"info@tophousemarbella.com · +34 662 592 504",
   },
   de: {
-    badge:"Immobilienberater · Marbella · Costa del Sol",
+    badge:"Immobilienberater",
     profile_sub:"Hintergrund in der Luxushotellerie · Immobilienberater",
-    profile_location:"Marbella, Costa del Sol, Spanien",
+    profile_location:"Marbella · Costa del Sol, Spanien",
     about_label:"Über mich",
     about_text:`Die <strong>Luxushotellerie</strong> hat mich gelehrt, dass wahre Exzellenz in Vertrauen, Diskretion und wirklich personalisiertem Service liegt. Nach über einem Jahrzehnt in der Branche haben mich diese Werte natürlich in die Immobilienbranche geführt, wo ich raffinierte Kundenbetreuung und akribische Liebe zum Detail kombiniere, um <strong>internationalen Kunden</strong> bei der Entdeckung außergewöhnlicher Investitionsmöglichkeiten an der Costa del Sol zu helfen.`,
     services_label:"Immobilienservice",
@@ -858,18 +891,18 @@ const T = {
     portfolio_label:"Immobilienportfolio",
     stat_exp:"Jahre Luxus-Service",stat_lang:"Sprachen",stat_loc:"Sitz in Marbella",
     connect_label:"Kontakt",
-    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Spanien",
+    footer:"© 2026 Rodrigo Miguel Zabala Schlegel · Top House Marbella · Marbella, Spanien",
     link_email_name:"E-Mail",
     link_email_handle:"rodrigo@tophousemarbella.com",
-    link_web_name:"Top House Marbella",
-    link_web_handle:"Website besuchen",
+    link_web_name:"Top House Marbella Website",
+    link_web_handle:"Verfügbare Immobilien ansehen",
     link_company_name:"Unternehmenskontakt",
-    link_company_handle:"info@tophousemarbella.com",
+    link_company_handle:"info@tophousemarbella.com · +34 662 592 504",
   },
   fr: {
-    badge:"Conseiller Immobilier · Marbella · Costa del Sol",
+    badge:"Conseiller immobilier",
     profile_sub:"Expérience en hôtellerie de luxe · Conseiller immobilier",
-    profile_location:"Marbella, Costa del Sol, Espagne",
+    profile_location:"Marbella · Costa del Sol, Espagne",
     about_label:"À propos",
     about_text:`L'<strong>hôtellerie de luxe</strong> m'a appris que la véritable excellence réside dans la confiance, la discrétion et un service véritablement personnalisé. Après plus d'une décennie dans l'industrie, ces valeurs m'ont naturellement guidé vers l'immobilier, où je combine un service client raffiné et une attention méticuleuse aux détails pour aider les <strong>clients internationaux</strong> à découvrir des opportunités d'investissement exceptionnelles sur la Costa del Sol.`,
     services_label:"Services Immobiliers",
@@ -879,18 +912,18 @@ const T = {
     portfolio_label:"Portefeuille Immobilier",
     stat_exp:"Ans de service de luxe",stat_lang:"Langues",stat_loc:"Basé à Marbella",
     connect_label:"Contact",
-    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Espagne",
+    footer:"© 2026 Rodrigo Miguel Zabala Schlegel · Top House Marbella · Marbella, Espagne",
     link_email_name:"Email",
     link_email_handle:"rodrigo@tophousemarbella.com",
-    link_web_name:"Top House Marbella",
-    link_web_handle:"Visiter le Site Web",
+    link_web_name:"Site Web Top House Marbella",
+    link_web_handle:"Voir les propriétés disponibles",
     link_company_name:"Contact Entreprise",
-    link_company_handle:"info@tophousemarbella.com",
+    link_company_handle:"info@tophousemarbella.com · +34 662 592 504",
   },
   it: {
-    badge:"Consulente Immobiliare · Marbella · Costa del Sol",
+    badge:"Consulente immobiliare",
     profile_sub:"Background in ospitalità di lusso · Consulente immobiliare",
-    profile_location:"Marbella, Costa del Sol, Spagna",
+    profile_location:"Marbella · Costa del Sol, Spagna",
     about_label:"Chi sono",
     about_text:`L'<strong>ospitalità di lusso</strong> mi ha insegnato che la vera eccellenza risiede nella fiducia, nella discrezione e in un servizio genuinamente personalizzato. Dopo oltre un decennio nel settore, questi valori mi hanno guidato naturalmente verso il settore immobiliare, dove combino un'assistenza clienti raffinata e una meticolosa attenzione ai dettagli per aiutare <strong>clienti internazionali</strong> a scoprire eccezionali opportunità di investimento nella Costa del Sol.`,
     services_label:"Servizi Immobiliari",
@@ -900,18 +933,18 @@ const T = {
     portfolio_label:"Portfolio Immobiliare",
     stat_exp:"Anni nei servizi di lusso",stat_lang:"Lingue",stat_loc:"Base a Marbella",
     connect_label:"Contatti",
-    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Spagna",
+    footer:"© 2026 Rodrigo Miguel Zabala Schlegel · Top House Marbella · Marbella, Spagna",
     link_email_name:"Email",
     link_email_handle:"rodrigo@tophousemarbella.com",
-    link_web_name:"Top House Marbella",
-    link_web_handle:"Visita il Sito",
+    link_web_name:"Sito Web Top House Marbella",
+    link_web_handle:"Vedi proprietà disponibili",
     link_company_name:"Contatto Aziendale",
-    link_company_handle:"info@tophousemarbella.com",
+    link_company_handle:"info@tophousemarbella.com · +34 662 592 504",
   },
   pt: {
-    badge:"Consultor Imobiliário · Marbella · Costa del Sol",
+    badge:"Consultor imobiliário",
     profile_sub:"Experiência em hospitalidade de luxo · Consultor imobiliário",
-    profile_location:"Marbella, Costa del Sol, Espanha",
+    profile_location:"Marbella · Costa del Sol, Espanha",
     about_label:"Sobre mim",
     about_text:`A <strong>hospitalidade de luxo</strong> ensinou-me que a verdadeira excelência reside na confiança, discrição e num serviço genuinamente personalizado. Após mais de uma década no setor, esses valores guiaram-me naturalmente para o mercado imobiliário, onde combino um atendimento requintado e uma meticulosa atenção aos detalhes para ajudar <strong>clientes internacionais</strong> a descobrir excecionais oportunidades de investimento na Costa del Sol.`,
     services_label:"Serviços Imobiliários",
@@ -921,13 +954,13 @@ const T = {
     portfolio_label:"Portfólio Imobiliário",
     stat_exp:"Anos em serviço de luxo",stat_lang:"Idiomas",stat_loc:"Baseado em Marbella",
     connect_label:"Contacto",
-    footer:"© 2026 Rodrigo MZS · Top House Marbella · Marbella, Espanha",
+    footer:"© 2026 Rodrigo Miguel Zabala Schlegel · Top House Marbella · Marbella, Espanha",
     link_email_name:"Email",
     link_email_handle:"rodrigo@tophousemarbella.com",
-    link_web_name:"Top House Marbella",
-    link_web_handle:"Visitar Site",
+    link_web_name:"Site Top House Marbella",
+    link_web_handle:"Ver propriedades disponíveis",
     link_company_name:"Contacto da Empresa",
-    link_company_handle:"info@tophousemarbella.com",
+    link_company_handle:"info@tophousemarbella.com · +34 662 592 504",
   },
 };
 
